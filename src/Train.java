@@ -11,9 +11,9 @@ public class Train {
     }
 
     public void insert_path() {
-        System.out.print("How many paths in between?:");
+        //System.out.print("How many paths in between?:");
         Scanner sc = new Scanner(System.in);
-        int total_paths = sc.nextInt();
+        int total_paths = 2; //sc.nextInt();
         for (int i = 0 ; i < total_paths ; ++i) {
             System.out.println("Enter details in the following format: Start_station_number End_station_number start_time end_time");
 
@@ -24,6 +24,7 @@ public class Train {
             System.out.println(start_time + " " + end_time);
 
             Path path = new Path(this.number, start_station, end_station, start_time, end_time);
+
             this.paths.add(path);
             if (this.paths.size() == 1) {
                 this.current_station = start_station;
