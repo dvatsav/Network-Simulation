@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.*;
 
 public class simulator {
@@ -22,7 +21,11 @@ public class simulator {
         g.insert_routes(4, 3, 1);
         g.insert_routes(4, 0, 1);
         g.insert_routes(3, 1, 1);
-        g.print_graph();
+        //g.print_graph();
+        g.insert_train(0);
+        g.insert_train(1);
+        g.insert_train(2);
+        //g.print_trains();
 
     }
 }

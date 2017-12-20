@@ -8,8 +8,7 @@ public class Node {
     boolean full = false;
     PriorityQueue<Node> waitlist = new PriorityQueue<>();
 
-    public Node(int source, int destination, int capacity)
-    {
+    public Node(int source, int destination, int capacity) {
         this.link = null;
         this.source = source;
         this.destination = destination;
