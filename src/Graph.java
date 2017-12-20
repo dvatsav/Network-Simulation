@@ -30,7 +30,7 @@ public class Graph{
 
     public void run_simulation() {
         for (int i = 0 ; i < trains.size() ; ++i) {
-            if (i == 1) {
+            if (i == 0) {
                 for (int j = 0 ; j < trains.get(i).paths.size() ; ++j) {
                     for (edge_node edge : edges) {
                         if (trains.get(i).paths.get(j).source_station == edge.source_station && trains.get(i).paths.get(j).destination_station == edge.destination_station) {
@@ -76,6 +76,6 @@ public class Graph{
     }
 
     public boolean check_clash(int start_1, int start_2, int end_1, int end_2) {
-        return (start_1 <= start_2 && start_2 <= end_2) || (end_2 < end_1 && end_2 > start_1);
+        return (start_1 <= start_2 && start_2 < end_1) || (end_2 < end_1 && end_2 > start_1);
     }
 }
