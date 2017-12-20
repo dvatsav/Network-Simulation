@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="445a26ee-8888-4d11-ad89-e8be45e6dac9" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/Graph.java" afterPath="$PROJECT_DIR$/src/Graph.java" />
-      <change beforePath="$PROJECT_DIR$/src/Train.java" afterPath="$PROJECT_DIR$/src/Train.java" />
-      <change beforePath="$PROJECT_DIR$/src/simulator.java" afterPath="$PROJECT_DIR$/src/simulator.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -341,7 +338,7 @@
       <workItem from="1513648648763" duration="192000" />
       <workItem from="1513649092177" duration="84000" />
       <workItem from="1513649219190" duration="2156000" />
-      <workItem from="1513756233165" duration="18252000" />
+      <workItem from="1513756233165" duration="18304000" />
     </task>
     <task id="LOCAL-00001" summary="switched to a system with bi quadratic complexity. Must switch to a lookup table">
       <created>1513793782446</created>
@@ -350,11 +347,18 @@
       <option name="project" value="LOCAL" />
       <updated>1513793782446</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="tested for biquad">
+      <created>1513794881267</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1513794881267</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31776000" />
+    <option name="totallyTimeSpent" value="31828000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1939" y="0" width="1556" height="858" extended-state="0" />
@@ -397,7 +401,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="switched to a system with bi quadratic complexity. Must switch to a lookup table" />
-    <option name="LAST_COMMIT_MESSAGE" value="switched to a system with bi quadratic complexity. Must switch to a lookup table" />
+    <MESSAGE value="tested for biquad" />
+    <option name="LAST_COMMIT_MESSAGE" value="tested for biquad" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
