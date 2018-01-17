@@ -24,7 +24,7 @@ public class Graph{
 
     public void insert_routes(int source_station, int destination_station, int capacity) {
         adj_list.get(source_station).add(adj_list.get(destination_station).get(0));
-        edge_node temp = new edge_node(source_station, destination_station);
+        edge_node temp = new edge_node(source_station, destination_station, capacity);
         edges.add(temp);
         lookuptable.put(String.valueOf(source_station) + " " + String.valueOf(destination_station), temp);
     }
@@ -51,14 +51,19 @@ public class Graph{
                     edge_node edge = lookuptable.get(String.valueOf(trains.get(i).paths.get(j).source_station) + " " + String.valueOf(trains.get(i).paths.get(j).destination_station));
                     Node node = lookuptable2.get(String.valueOf(trains.get(i).paths.get(j).destination_station));
                     for (int l = 0; l < edge.times_on_path.size(); ++l) {
+                        int num_of_clashes = 1;
                         if (check_clash(edge.times_on_path.get(l).start_time, trains.get(i).paths.get(j).start_time, edge.times_on_path.get(l).end_time, trains.get(i).paths.get(j).end_time)) {
-                            int delay = edge.free_at - trains.get(i).paths.get(j).start_time;
-                            trains.get(i).total_delay += delay;
-                            trains.get(i).paths.get(j).start_time = edge.free_at;
-                            trains.get(i).paths.get(j).end_time += delay;
-                            if (j < trains.get(i).paths.size() - 1)
-                                update_times(delay, i, j + 1);
-                            break;
+                            num_of_clashes+=1;
+                            if (num_of_clashes > edge.capacity)
+                            {
+                            	int delay = edge.free_at - trains.get(i).paths.get(j).start_time;
+	                            trains.get(i).total_delay += delay;
+	                            trains.get(i).paths.get(j).start_time = edge.free_at;
+	                            trains.get(i).paths.get(j).end_time += delay;
+	                            if (j < trains.get(i).paths.size() - 1)
+	                                update_times(delay, i, j + 1);
+	                            break;
+                        	}
                         }
                     }
                     edge.add_time(trains.get(i).paths.get(j), trains.get(i));
@@ -67,7 +72,7 @@ public class Graph{
                         for (int l = 0; l < node.times_at_station.size(); ++l) {
                             if (check_clash(trains.get(i).paths.get(j).end_time, node.times_at_station.get(l).start_time, trains.get(i).paths.get(j + 1).start_time, node.times_at_station.get(l).end_time)){
                                 num_of_clashes += 1;
-                                System.out.println("hello " + trains.get(i));
+                                //System.out.println("hello " + trains.get(i));
                                 if (num_of_clashes > node.capacity) {
                                     int delay = node.free_at - trains.get(i).paths.get(j).end_time;
                                     trains.get(i).total_delay += delay;
