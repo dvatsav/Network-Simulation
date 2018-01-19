@@ -49,8 +49,11 @@ public class simulator {
 		g.insert_train(0);
 		g.insert_train(1);
 		*/
+
 		g.run_simulation();
 		g.print_trains();
+
+
 
 	}
 }

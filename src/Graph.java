@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Graph{
     ArrayList<ArrayList<Node>> adj_list;
@@ -9,6 +11,7 @@ public class Graph{
     HashMap<String, edge_node> lookuptable = new HashMap<>();
     static HashMap<String, Node> lookuptable2 = new HashMap<>();
     int num_of_stations;
+
     public Graph(int n) {
         this.num_of_stations = n;
         adj_list = new ArrayList<>();
@@ -36,65 +39,99 @@ public class Graph{
         trains.add(train);
     }
 
+    public void shuffleArray(int[] ar)
+    {
+        // If running on Java 6 or older, use `new Random()` on RHS here
+        Random rnd = ThreadLocalRandom.current();
+        for (int i = ar.length - 1; i > 0; i--)
+        {
+            int index = rnd.nextInt(i + 1);
+            // Simple swap
+            int a = ar[index];
+            ar[index] = ar[i];
+            ar[i] = a;
+        }
+    }
+
     public void run_simulation() {
-        for (int i = 0 ; i < trains.size() ; ++i) {
-            if (i == 0) {
-                for (int j = 0 ; j < trains.get(i).paths.size() ; ++j) {
-                    edge_node edge = lookuptable.get(String.valueOf(trains.get(i).paths.get(j).source_station) + " " + String.valueOf(trains.get(i).paths.get(j).destination_station));
-                    Node node = lookuptable2.get(String.valueOf(trains.get(i).paths.get(j).destination_station));
-                    edge.add_time(trains.get(i).paths.get(j), trains.get(i));
-                    if (j != trains.get(i).paths.size() - 1) {
-                        node.add_time(trains.get(i).paths.get(j), trains.get(i).paths.get(j + 1), trains.get(i));
+        int traintotal = trains.size();
+        int[] order = new int[traintotal];
+        for (int i = 0 ; i < traintotal ; ++i)
+            order[i] = i;
+        shuffleArray(order);
+        for (int j = 0 ; j < trains.get(order[0]).paths.size() ; ++j)
+        {
+            edge_node edge = lookuptable.get(String.valueOf(trains.get(order[0]).paths.get(j).source_station) + " " + String.valueOf(trains.get(order[0]).paths.get(j).destination_station));
+            Node node = lookuptable2.get(String.valueOf(trains.get(order[0]).paths.get(j).destination_station));
+            edge.add_time(trains.get(order[0]).paths.get(j), trains.get(order[0]));
+            if (j != trains.get(order[0]).paths.size() - 1)
+
+            {
+                node.add_time(trains.get(order[0]).paths.get(j), trains.get(order[0]).paths.get(j + 1), trains.get(order[0]));
+            }
+        }
+        for (int i = 1 ; i < trains.size() ; ++i) {
+            for (int j = 0 ; j < trains.get(order[i]).paths.size() ; ++j)
+            {
+                edge_node edge = lookuptable.get(String.valueOf(trains.get(order[i]).paths.get(j).source_station) + " " + String.valueOf(trains.get(order[i]).paths.get(j).destination_station));
+                Node node = lookuptable2.get(String.valueOf(trains.get(order[i]).paths.get(j).destination_station));
+                for (int l = 0; l < edge.times_on_path.size(); ++l)
+                {
+                    int num_of_clashes = 1;
+                    if (check_clash(edge.times_on_path.get(l).start_time, trains.get(order[i]).paths.get(j).start_time, edge.times_on_path.get(l).end_time, trains.get(order[i]).paths.get(j).end_time))
+                    {
+                        num_of_clashes+=1;
+                        if (num_of_clashes > edge.capacity)
+                        {
+                            int delay = edge.free_at - trains.get(order[i]).paths.get(j).start_time;
+                            trains.get(order[i]).total_delay += delay;
+                            trains.get(order[i]).paths.get(j).start_time = edge.free_at;
+                            trains.get(order[i]).paths.get(j).end_time += delay;
+                            if (j < trains.get(order[i]).paths.size() - 1)
+                                update_times(delay, order[i], j + 1);
+                            break;
+                        }
                     }
                 }
-            } else {
-                for (int j = 0 ; j < trains.get(i).paths.size() ; ++j) {
-                    edge_node edge = lookuptable.get(String.valueOf(trains.get(i).paths.get(j).source_station) + " " + String.valueOf(trains.get(i).paths.get(j).destination_station));
-                    Node node = lookuptable2.get(String.valueOf(trains.get(i).paths.get(j).destination_station));
-                    for (int l = 0; l < edge.times_on_path.size(); ++l) {
-                        int num_of_clashes = 1;
-                        if (check_clash(edge.times_on_path.get(l).start_time, trains.get(i).paths.get(j).start_time, edge.times_on_path.get(l).end_time, trains.get(i).paths.get(j).end_time)) {
-                            num_of_clashes+=1;
-                            if (num_of_clashes > edge.capacity)
+                edge.add_time(trains.get(order[i]).paths.get(j), trains.get(order[i]));
+                if (j != trains.get(order[i]).paths.size() - 1) {
+                    int num_of_clashes = 1;
+                    for (int l = 0; l < node.times_at_station.size(); ++l)
+                    {
+                        if (check_clash(trains.get(order[i]).paths.get(j).end_time, node.times_at_station.get(l).start_time, trains.get(order[i]).paths.get(j + 1).start_time, node.times_at_station.get(l).end_time))
+                        {
+                            num_of_clashes += 1;
+                            //System.out.println("hello " + trains.get(i));
+                            if (num_of_clashes > node.capacity)
                             {
-                                int delay = edge.free_at - trains.get(i).paths.get(j).start_time;
-                                trains.get(i).total_delay += delay;
-                                trains.get(i).paths.get(j).start_time = edge.free_at;
-                                trains.get(i).paths.get(j).end_time += delay;
-                                if (j < trains.get(i).paths.size() - 1)
-                                    update_times(delay, i, j + 1);
+                                int delay = node.free_at - trains.get(order[i]).paths.get(j).end_time;
+                                trains.get(order[i]).total_delay += delay;
+                                trains.get(order[i]).paths.get(j).end_time = node.free_at;
+                                if (j < trains.get(order[i]).paths.size() - 1)
+                                    update_times(delay, order[i], j + 1);
                                 break;
                             }
                         }
                     }
-                    edge.add_time(trains.get(i).paths.get(j), trains.get(i));
-                    if (j != trains.get(i).paths.size() - 1) {
-                        int num_of_clashes = 1;
-                        for (int l = 0; l < node.times_at_station.size(); ++l) {
-                            if (check_clash(trains.get(i).paths.get(j).end_time, node.times_at_station.get(l).start_time, trains.get(i).paths.get(j + 1).start_time, node.times_at_station.get(l).end_time)){
-                                num_of_clashes += 1;
-                                //System.out.println("hello " + trains.get(i));
-                                if (num_of_clashes > node.capacity) {
-                                    int delay = node.free_at - trains.get(i).paths.get(j).end_time;
-                                    trains.get(i).total_delay += delay;
-                                    trains.get(i).paths.get(j).end_time = node.free_at;
-                                    if (j < trains.get(i).paths.size() - 1)
-                                        update_times(delay, i, j + 1);
-                                    break;
-                                }
-                            }
-                        }
-                        node.add_time(trains.get(i).paths.get(j), trains.get(i).paths.get(j + 1), trains.get(i));
-                    }
+                    node.add_time(trains.get(order[i]).paths.get(j), trains.get(order[i]).paths.get(j + 1), trains.get(order[i]));
                 }
+
             }
         }
     }
 
     public void print_trains() {
+        int delay = 0;
+        for (Train train : trains)
+        {
+            delay += train.total_delay;
+        }
+
         for (Train train : trains) {
             System.out.println(train);
+            System.out.println("Total Delay is: " + delay);
         }
+
     }
 
     public void print_graph() {
