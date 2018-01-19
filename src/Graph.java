@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,7 +30,7 @@ public class Graph{
         lookuptable.put(String.valueOf(source_station) + " " + String.valueOf(destination_station), temp);
     }
 
-    public void insert_train(int train_number) {
+    public void insert_train(int train_number) throws IOException {
         Train train = new Train(train_number);
         train.insert_path();
         trains.add(train);
@@ -56,14 +57,14 @@ public class Graph{
                             num_of_clashes+=1;
                             if (num_of_clashes > edge.capacity)
                             {
-                            	int delay = edge.free_at - trains.get(i).paths.get(j).start_time;
-	                            trains.get(i).total_delay += delay;
-	                            trains.get(i).paths.get(j).start_time = edge.free_at;
-	                            trains.get(i).paths.get(j).end_time += delay;
-	                            if (j < trains.get(i).paths.size() - 1)
-	                                update_times(delay, i, j + 1);
-	                            break;
-                        	}
+                                int delay = edge.free_at - trains.get(i).paths.get(j).start_time;
+                                trains.get(i).total_delay += delay;
+                                trains.get(i).paths.get(j).start_time = edge.free_at;
+                                trains.get(i).paths.get(j).end_time += delay;
+                                if (j < trains.get(i).paths.size() - 1)
+                                    update_times(delay, i, j + 1);
+                                break;
+                            }
                         }
                     }
                     edge.add_time(trains.get(i).paths.get(j), trains.get(i));

@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -10,18 +11,18 @@ public class Train {
         this.number = number;
     }
 
-    public void insert_path() {
-        System.out.print("How many paths in between?:");
-        Scanner sc = new Scanner(System.in);
-        int total_paths = sc.nextInt();
+    public void insert_path() throws IOException {
+        //System.out.print("How many paths in between?:");
+        //Scanner sc = new Scanner(System.in);
+        int total_paths = Reader.nextInt();
         for (int i = 0 ; i < total_paths ; ++i) {
-            System.out.println("Enter details in the following format: Start_station_number End_station_number start_time end_time");
+            //System.out.println("Enter details in the following format: Start_station_number End_station_number start_time end_time");
 
-            int start_station = sc.nextInt();
-            int end_station = sc.nextInt();
-            int start_time = time_convert(sc.next());
-            int end_time = time_convert(sc.next());
-            System.out.println(start_time + " " + end_time);
+            int start_station = Reader.nextInt();
+            int end_station = Reader.nextInt();
+            int start_time = time_convert(Reader.next());
+            int end_time = time_convert(Reader.next());
+            //System.out.println(start_time + " " + end_time);
 
             Path path = new Path(this.number, start_station, end_station, start_time, end_time);
 

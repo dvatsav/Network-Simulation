@@ -22,7 +22,7 @@ public class Node {
         times_at_station.add(new timing_node(path1.end_time, path2.start_time, train));
         if (path2.start_time > free_at) {
             free_at = path2.start_time;
-            System.out.println("free at " + free_at);
+            //System.out.println("free at " + free_at);
         }
     }
 
