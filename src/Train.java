@@ -38,7 +38,7 @@ public class Train {
         for (Path path : paths) {
             pathstring += path;
         }
-        return "Train number: " + Integer.toString(number) + ", " + pathstring + ", Total delay for train is=: " + Integer.toString(total_delay);
+        return "Train number: " + Integer.toString(number) + "\n " + pathstring + "Total delay for train is=: " + Integer.toString(total_delay) + "\n\n";
     }
 
     public int time_convert(String t) {

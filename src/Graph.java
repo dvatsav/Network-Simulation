@@ -3,6 +3,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+/*
+For the train being inserted, for all edges and nodes
+ */
+
 
 public class Graph{
     ArrayList<ArrayList<Node>> adj_list;
@@ -11,6 +15,8 @@ public class Graph{
     HashMap<String, edge_node> lookuptable = new HashMap<>();
     static HashMap<String, Node> lookuptable2 = new HashMap<>();
     int num_of_stations;
+
+    static ArrayList<sortnodes> finals = new ArrayList<>();
 
     public Graph(int n) {
         this.num_of_stations = n;
@@ -58,7 +64,7 @@ public class Graph{
         int[] order = new int[traintotal];
         for (int i = 0 ; i < traintotal ; ++i)
             order[i] = i;
-        shuffleArray(order);
+        //shuffleArray(order);
         for (int j = 0 ; j < trains.get(order[0]).paths.size() ; ++j)
         {
             edge_node edge = lookuptable.get(String.valueOf(trains.get(order[0]).paths.get(j).source_station) + " " + String.valueOf(trains.get(order[0]).paths.get(j).destination_station));
@@ -126,12 +132,15 @@ public class Graph{
         {
             delay += train.total_delay;
         }
-
+        sortnodes s = new sortnodes();
         for (Train train : trains) {
-            System.out.println(train);
-            System.out.println("Total Delay is: " + delay);
+            //System.out.println(train);
+            s.trains.add(train);
+            //System.out.println("Total Delay is: " + delay);
+            //System.out.println(delay);
         }
-
+        s.total_delay = delay;
+        finals.add(s);
     }
 
     public void print_graph() {
